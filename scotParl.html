@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holyrood 2026 Simulator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 5px;
+        }
+        .party-color {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .status-bar {
+            background-color: #eee;
+            border-radius: 5px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .status-fill {
+            background-color: #27ae60;
+            height: 100%;
+            transition: width 0.3s, background-color 0.3s;
+        }
+        .warning {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .btn {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #3498db;
+        }
+        .bill-input {
+            width: 90%;
+            padding: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        #voteResult {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .passed { background-color: #d5f5e3; border-left: 5px solid #27ae60; }
+        .failed { background-color: #fadbd8; border-left: 5px solid #e74c3c; }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center;">🏛️ Holyrood 2026 Simulator</h1>
+    
+    <div class="container">
+        <!-- Left Panel: Parliament Editor -->
+        <div class="panel">
+            <h2>Parliament Makeup</h2>
+            <p>Edit the seats below. Total must equal 129.</p>
+            
+            <div class="status-bar">
+                <div id="seatProgressBar" class="status-fill" style="width: 100%;"></div>
+            </div>
+            <p id="totalSeatsText">Total Seats: 129 / 129</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Party</th>
+                        <th>Leader</th>
+                        <th>Seats</th>
+                    </tr>
+                </thead>
+                <tbody id="partyTableBody">
+                    <!-- JavaScript will populate this -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Right Panel: Legislative Chamber -->
+        <div class="panel">
+            <h2>Propose a Bill</h2>
+            <input type="text" id="billName" class="bill-input" placeholder="e.g., Emergency Budget Act 2026">
+            
+            <p><strong>Select parties voting FOR the bill:</strong></p>
+            <div id="votingCheckboxes" style="margin-bottom: 20px;">
+                <!-- JavaScript will populate this -->
+            </div>
+
+            <button class="btn" onclick="holdVote()">Hold Vote</button>
+
+            <div id="voteResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // Initial Game State
+        const parties = [
+            { id: 'snp', name: "SNP", seats: 58, leader: "John Swinney", color: "#FDF38E" },
+            { id: 'labour', name: "Scottish Labour", seats: 17, leader: "Anas Sarwar", color: "#E4003B" },
+            { id: 'reform', name: "Reform UK", seats: 17, leader: "Richard Tice", color: "#12B6CF" },
+            { id: 'greens', name: "Scottish Greens", seats: 15, leader: "Lorna Slater", color: "#00B140" },
+            { id: 'conservatives', name: "Scottish Cons.", seats: 12, leader: "Russell Findlay", color: "#0087DC" },
+            { id: 'libdems', name: "Liberal Democrats", seats: 10, leader: "Alex Cole-Hamilton", color: "#FAA61A" }
+        ];
+
+        const TOTAL_SEATS_TARGET = 129;
+
+        // Function to render the UI based on data
+        function renderApp() {
+            const tbody = document.getElementById('partyTableBody');
+            const checkboxes = document.getElementById('votingCheckboxes');
+            
+            tbody.innerHTML = '';
+            checkboxes.innerHTML = '';
+            let currentTotal = 0;
+
+            parties.forEach((party, index) => {
+                currentTotal += party.seats;
+
+                // 1. Build Table Rows
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="party-color" style="background-color: ${party.color}; border: 1px solid #ccc;"></span>${party.name}</td>
+                    <td>${party.leader}</td>
+                    <td><input type="number" min="0" max="129" value="${party.seats}" onchange="updateSeats(${index}, this.value)"></td>
+                `;
+                tbody.appendChild(tr);
+
+                // 2. Build Voting Checkboxes
+                const div = document.createElement('div');
+                div.style.marginBottom = "8px";
+                div.innerHTML = `
+                    <label>
+                        <input type="checkbox" id="vote_${party.id}" value="${index}">
+                        ${party.name} (${party.seats} seats)
+                    </label>
+                `;
+                checkboxes.appendChild(div);
+            });
+
+            // Update Progress Bar & Warning
+            const totalText = document.getElementById('totalSeatsText');
+            const progressBar = document.getElementById('seatProgressBar');
+            
+            totalText.innerText = `Total Seats: ${currentTotal} / ${TOTAL_SEATS_TARGET}`;
+            
+            // Calculate percentage for the bar (cap at 100% visually)
+            let percent = (currentTotal / TOTAL_SEATS_TARGET) * 100;
+            progressBar.style.width = Math.min(percent, 100) + "%";
+
+            if (currentTotal !== TOTAL_SEATS_TARGET) {
+                totalText.className = "warning";
+                totalText.innerText += " ⚠️ Must equal 129!";
+                progressBar.style.backgroundColor = "#e74c3c"; // Red
+            } else {
+                totalText.className = "";
+                progressBar.style.backgroundColor = "#27ae60"; // Green
+            }
+        }
+
+        // Function to handle seat edits
+        function updateSeats(index, newValue) {
+            parties[index].seats = parseInt(newValue) || 0;
+            renderApp(); // Re-draw everything when a seat count changes
+            document.getElementById('voteResult').style.display = 'none'; // Hide old vote results
+        }
+
+        // Function to calculate the vote
+        function holdVote() {
+            const billName = document.getElementById('billName').value || "Unnamed Bill";
+            let votesFor = 0;
+            let votesAgainst = 0;
+
+            // Tally the votes
+            parties.forEach((party, index) => {
+                const checkbox = document.getElementById(`vote_${party.id}`);
+                if (checkbox.checked) {
+                    votesFor += party.seats;
+                } else {
+                    votesAgainst += party.seats;
+                }
+            });
+
+            const resultDiv = document.getElementById('voteResult');
+            resultDiv.style.display = 'block';
+
+            // Determine outcome
+            if (votesFor > votesAgainst) {
+                resultDiv.className = "passed";
+                resultDiv.innerHTML = `
+                    <h3 style="margin-top:0; color:#27ae60;">✅ PASSED</h3>
+                    <p><strong>${billName}</strong> has passed Holyrood.</p>
+                    <p>Votes FOR: ${votesFor} <br> Votes AGAINST: ${votesAgainst}</p>
+                `;
+            } else if (votesFor === votesAgainst) {
+                resultDiv.className = "failed";
+                resultDiv.innerHTML = `
+                    <h3 style="margin-top:0; color:#e74c3c;">⚖️ TIED (FAILED)</h3>
+                    <p><strong>${billName}</strong> resulted in a tie.</p>
+                    <p>The Presiding Officer casts the deciding vote for the status quo. The bill fails.</p>
+                    <p>Votes FOR: ${votesFor} <br> Votes AGAINST: ${votesAgainst}</p>
+                `;
+            } else {
+                resultDiv.className = "failed";
+                resultDiv.innerHTML = `
+                    <h3 style="margin-top:0; color:#e74c3c;">❌ FAILED</h3>
+                    <p><strong>${billName}</strong> has been defeated.</p>
+                    <p>Votes FOR: ${votesFor} <br> Votes AGAINST: ${votesAgainst}</p>
+                `;
+            }
+        }
+
+        // Initialize the app on page load
+        renderApp();
+    </script>
+</body>
+</html>

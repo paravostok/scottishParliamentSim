@@ -17,6 +17,7 @@
         }
         .container {
             display: flex;
+            flex-wrap: wrap;
             gap: 20px;
             max-width: 1000px;
             margin: 0 auto;
@@ -27,6 +28,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             flex: 1;
+            min-width: 300px; /* Helps with mobile responsiveness on GitHub Pages */
         }
         table {
             width: 100%;
@@ -41,6 +43,8 @@
         input[type="number"] {
             width: 60px;
             padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         .party-color {
             display: inline-block;
@@ -74,6 +78,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.2s;
         }
         .btn:hover {
             background-color: #3498db;
@@ -83,6 +88,8 @@
             padding: 8px;
             margin-bottom: 15px;
             font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         #voteResult {
             margin-top: 20px;
@@ -92,6 +99,14 @@
         }
         .passed { background-color: #d5f5e3; border-left: 5px solid #27ae60; }
         .failed { background-color: #fadbd8; border-left: 5px solid #e74c3c; }
+        
+        /* Subtle footer for GitHub Pages */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -139,6 +154,10 @@
         </div>
     </div>
 
+    <footer>
+        <p>Built for the May 2026 Scottish Parliament setup.</p>
+    </footer>
+
     <script>
         // Initial Game State
         const parties = [
@@ -177,7 +196,7 @@
                 const div = document.createElement('div');
                 div.style.marginBottom = "8px";
                 div.innerHTML = `
-                    <label>
+                    <label style="cursor: pointer;">
                         <input type="checkbox" id="vote_${party.id}" value="${index}">
                         ${party.name} (${party.seats} seats)
                     </label>
@@ -237,7 +256,7 @@
                 resultDiv.innerHTML = `
                     <h3 style="margin-top:0; color:#27ae60;">✅ PASSED</h3>
                     <p><strong>${billName}</strong> has passed Holyrood.</p>
-                    <p>Votes FOR: ${votesFor} <br> Votes AGAINST: ${votesAgainst}</p>
+                    <p>Votes FOR: <strong>${votesFor}</strong> <br> Votes AGAINST: <strong>${votesAgainst}</strong></p>
                 `;
             } else if (votesFor === votesAgainst) {
                 resultDiv.className = "failed";
@@ -245,14 +264,14 @@
                     <h3 style="margin-top:0; color:#e74c3c;">⚖️ TIED (FAILED)</h3>
                     <p><strong>${billName}</strong> resulted in a tie.</p>
                     <p>The Presiding Officer casts the deciding vote for the status quo. The bill fails.</p>
-                    <p>Votes FOR: ${votesFor} <br> Votes AGAINST: ${votesAgainst}</p>
+                    <p>Votes FOR: <strong>${votesFor}</strong> <br> Votes AGAINST: <strong>${votesAgainst}</strong></p>
                 `;
             } else {
                 resultDiv.className = "failed";
                 resultDiv.innerHTML = `
                     <h3 style="margin-top:0; color:#e74c3c;">❌ FAILED</h3>
                     <p><strong>${billName}</strong> has been defeated.</p>
-                    <p>Votes FOR: ${votesFor} <br> Votes AGAINST: ${votesAgainst}</p>
+                    <p>Votes FOR: <strong>${votesFor}</strong> <br> Votes AGAINST: <strong>${votesAgainst}</strong></p>
                 `;
             }
         }

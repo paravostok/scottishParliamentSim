@@ -18,7 +18,7 @@
         .stage.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .btn { background-color: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: 600; margin-top: 15px; transition: background 0.2s; }
+        .btn { background-color: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: 600; margin-top: 15px; transition: ba[...]
         .btn:hover { background-color: #3498db; }
         .btn:disabled { background-color: #bdc3c7; cursor: not-allowed; }
         
@@ -31,11 +31,11 @@
         .party-card input[type="number"] { width: 50px; padding: 6px; border: 1px solid #bdc3c7; border-radius: 4px; text-align: center; font-weight: bold; }
         .party-color { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 8px; vertical-align: middle; border: 1px solid #ccc; }
 
-        .custom-name-input { width: 110px; padding: 2px; margin: 0; font-size: 14px; font-weight: 500; border: 1px solid transparent; border-bottom: 1px dashed #95a5a6; background: transparent; cursor: pointer; font-family: inherit; color: inherit; }
+        .custom-name-input { width: 110px; padding: 2px; margin: 0; font-size: 14px; font-weight: 500; border: 1px solid transparent; border-bottom: 1px dashed #95a5a6; background: transparent; cursor[...]
         .custom-name-input:focus { outline: none; border-bottom: 1px solid var(--accent); cursor: text; }
         .custom-color-input { width: 22px; height: 22px; padding: 0; border: none; cursor: pointer; margin-right: 8px; vertical-align: middle; background: none; }
 
-        select, input[type="text"]:not(.custom-name-input) { width: 100%; padding: 10px; border: 1px solid #bdc3c7; border-radius: 5px; font-size: 16px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; }
+        select, input[type="text"]:not(.custom-name-input) { width: 100%; padding: 10px; border: 1px solid #bdc3c7; border-radius: 5px; font-size: 16px; margin-top: 8px; margin-bottom: 15px; box-sizin[...]
         
         .chamber-container { text-align: center; margin: 20px 0; padding: 30px 20px; background: #fff; border: 1px solid #e1e8ed; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         .chamber-svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
@@ -56,7 +56,7 @@
         /* Focus Group UI */
         .polling-dash { margin-top: 20px; border-top: 2px solid #ecf0f1; padding-top: 20px; display: none; }
         .voter-card { background: white; border: 1px solid #dcdde1; border-radius: 6px; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
-        .voter-avatar { width: 50px; height: 50px; border-radius: 50%; background: #ecf0f1; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #7f8c8d; flex-shrink: 0; }
+        .voter-avatar { width: 50px; height: 50px; border-radius: 50%; background: #ecf0f1; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #7f8[...]
         .voter-score { font-size: 20px; font-weight: bold; padding: 5px 10px; border-radius: 4px; color: white; min-width: 45px; text-align: center; }
         .score-high { background: var(--success); } .score-mid { background: var(--warning); } .score-low { background: var(--danger); }
         .voter-quote { font-style: italic; color: #34495e; margin-top: 5px; font-size: 14px; }
@@ -109,7 +109,7 @@
         </div>
 
         <div id="poVoteResult"></div>
-        <button id="btnPoNextRound" class="btn" style="display:none; width: 100%; margin-top: 20px; background-color: var(--warning);" onclick="setupNextRound('po')">Proceed to Next Round</button>
+        <button id="btnPoNextRound" class="btn" style="display:none; width: 100%; margin-top: 20px; background-color: var(--warning);" onclick="setupNextRound('po')">Proceed to Next Round</button[...]
         <button id="btnStage2Next" class="btn" style="display:none; width: 100%; margin-top: 20px;" onclick="goToStage(3)">Proceed to First Minister Election</button>
     </div>
 
@@ -127,7 +127,7 @@
         </div>
 
         <div id="fmVoteResult"></div>
-        <button id="btnFmNextRound" class="btn" style="display:none; width: 100%; margin-top: 20px; background-color: var(--warning);" onclick="setupNextRound('fm')">Proceed to Next Round</button>
+        <button id="btnFmNextRound" class="btn" style="display:none; width: 100%; margin-top: 20px; background-color: var(--warning);" onclick="setupNextRound('fm')">Proceed to Next Round</button[...]
         <button id="btnStage3Next" class="btn" style="display:none; width: 100%; margin-top: 20px;" onclick="goToStage(4)">Proceed to Cabinet Formation</button>
     </div>
 
@@ -275,7 +275,7 @@
             "2011": [ {name: "Alex Salmond", party: "snp"}, {name: "Iain Gray", party: "labour"} ],
             "2016": [ {name: "Nicola Sturgeon", party: "snp"}, {name: "Willie Rennie", party: "libdems"} ],
             "2021": [ {name: "Nicola Sturgeon", party: "snp"}, {name: "Douglas Ross", party: "conservatives"}, {name: "Willie Rennie", party: "libdems"} ],
-            "2026": [ {name: "John Swinney", party: "snp"}, {name: "Anas Sarwar", party: "labour"}, {name: "Russell Findlay", party: "conservatives"}, {name: "Gillian Mackay", party: "greens"} ] // Updated Greens Candidate
+            "2026": [ {name: "John Swinney", party: "snp"}, {name: "Anas Sarwar", party: "labour"}, {name: "Russell Findlay", party: "conservatives"}, {name: "Gillian Mackay", party: "greens"} ]
         }
     };
 
@@ -322,7 +322,7 @@
                 colorHtml = `<input type="color" class="custom-color-input" value="${p.color}" onchange="updateCustomProp('color', this.value)">`;
             }
             let el = document.createElement('div'); el.className = 'party-card'; el.id = `card_${p.id}`;
-            el.innerHTML = `<div style="display:flex; align-items:center;">${colorHtml}${nameHtml}</div><input type="number" id="input_${p.id}" min="0" max="129" value="${p.seats}" onchange="updateSeat('${p.id}', this.value)">`;
+            el.innerHTML = `<div style="display:flex; align-items:center;">${colorHtml}${nameHtml}</div><input type="number" id="input_${p.id}" min="0" max="129" value="${p.seats}" onchange="updateSea[...]
             grid.appendChild(el);
         });
         updateGridOrder();
@@ -464,7 +464,51 @@
         return score;
     }
 
+    function setupPOElection() {
+        appState.electionContext.po.candidates = [];
+        let type = 'po';
+        let ctx = appState.electionContext[type];
+        
+        // 1. Safe lookup of historical candidates if the year exists in our database
+        if (appState.activeYear && appState.activeYear !== "custom" && historicalCandidates[type][appState.activeYear]) {
+            historicalCandidates[type][appState.activeYear].forEach(cand => {
+                let partyObj = parties.find(p => p.id === cand.party);
+                // Only pull them if their party actually won seats in this session
+                if (partyObj && partyObj.seats > 0) {
+                    let msp = appState.allMSPs.find(m => m.party === partyObj.id);
+                    if (msp) {
+                        // Keep historical names exact for immersion
+                        let historicalName = cand.name;
+                        ctx.candidates.push({ id: msp.id, name: historicalName, partyObj: partyObj });
+                    }
+                }
+            });
+        }
+        
+        // 2. Fallback / Custom Sandbox Safeguard: If no historical candidates match or it's a sandbox
+        if (ctx.candidates.length === 0) {
+            // Grab the top 4 largest parties with actual seats to nominate from
+            let topParties = parties.filter(p => p.seats > 0).sort((a,b) => b.seats - a.seats).slice(0, 4);
+            topParties.forEach(p => { 
+                let msp = appState.allMSPs.find(m => m.party === p.id && !ctx.candidates.map(c=>c.id).includes(m.id));
+                if (msp) {
+                    ctx.candidates.push({ id: msp.id, name: msp.name, partyObj: p }); 
+                }
+            });
+        }
+        
+        // 3. Bind active candidate loop state and render
+        ctx.active = [...ctx.candidates];
+        ctx.round = 1;
+        renderRoundUI('po');
+    }
+
     function setupElection(type) {
+        if (type === 'po') {
+            setupPOElection();
+            return;
+        }
+        // FM election logic (unchanged)
         let ctx = appState.electionContext[type]; ctx.candidates = [];
         if (appState.activeYear !== "custom" && historicalCandidates[type][appState.activeYear]) {
             historicalCandidates[type][appState.activeYear].forEach(cand => {
@@ -497,9 +541,9 @@
         const list = document.getElementById(`${type}CandidatesList`); list.innerHTML = '';
         ctx.candidates.forEach((cand) => {
             if (!ctx.active.find(c => c.id === cand.id)) {
-                list.innerHTML += `<div style="padding: 10px; margin-bottom: 5px;" class="eliminated"><span class="party-color" style="background-color: #95a5a6;"></span> ${cand.name} (${cand.partyObj.name}) - Eliminated</div>`;
+                list.innerHTML += `<div style="padding: 10px; margin-bottom: 5px;" class="eliminated"><span class="party-color" style="background-color: #95a5a6;"></span> ${cand.name} (${cand.par[...]
             } else {
-                list.innerHTML += `<label><input type="radio" name="${type}Vote" value="${cand.id}"> <span class="party-color" style="background-color: ${cand.partyObj.color};"></span> ${cand.name} (${cand.partyObj.name})</label>`;
+                list.innerHTML += `<label><input type="radio" name="${type}Vote" value="${cand.id}"> <span class="party-color" style="background-color: ${cand.partyObj.color};"></span> ${cand.nam[...]
             }
         });
         list.innerHTML += `<label><input type="radio" name="${type}Vote" value="abstain" checked> Abstain</label>`;
@@ -592,7 +636,7 @@
     function setupNextRound(type) { appState.electionContext[type].round++; renderRoundUI(type); }
 
     function goToStage(num) {
-        if (num === 2) { appState.playerPartyId = document.getElementById('playerPartySelect').value; document.getElementById('breadcrumbs').innerText = `STAGE 2: PRESIDING OFFICER ELECTION`; generateRoster(); setupElection('po'); }
+        if (num === 2) { appState.playerPartyId = document.getElementById('playerPartySelect').value; document.getElementById('breadcrumbs').innerText = `STAGE 2: PRESIDING OFFICER ELECTION`; generateRoster(); setupPOElection(); }
         if (num === 3) { document.getElementById('breadcrumbs').innerText = `STAGE 3: FIRST MINISTER ELECTION`; setupElection('fm'); }
         if (num === 4) { document.getElementById('breadcrumbs').innerText = `STAGE 4: GOVERNMENT FORMATION`; }
         if (num === 5) { document.getElementById('breadcrumbs').innerText = `STAGE 5: LEGISLATIVE CHAMBER`; saveCabinet(); setupLegislation(); }
@@ -613,7 +657,7 @@
         const container = document.getElementById('cabinetCheckboxes'); container.innerHTML = '';
         parties.filter(p => p.seats > 0).sort((a,b) => b.seats - a.seats).forEach(p => {
             const isFM = (p.id === appState.fmPartyId);
-            container.innerHTML += `<label><input type="checkbox" id="cab_${p.id}" value="${p.id}" ${isFM ? 'checked disabled' : ''}> <span class="party-color" style="background-color: ${p.color};"></span> ${p.name} (${p.seats} seats)</label>`;
+            container.innerHTML += `<label><input type="checkbox" id="cab_${p.id}" value="${p.id}" ${isFM ? 'checked disabled' : ''}> <span class="party-color" style="background-color: ${p.color}[...]
         });
     }
 
@@ -754,13 +798,19 @@
         
         const resDiv = document.getElementById('voteResult'); resDiv.style.display = 'block';
         if (votesFor > votesAgainst) {
-            resDiv.className = "passed"; resDiv.innerHTML = `<h3>✅ BILL PASSED</h3><p>Aye: <strong>${votesFor}</strong> | Noe: <strong>${votesAgainst}</strong> | Abstain: <strong>${abstains}</strong></p>`;
+            resDiv.className = "passed"; resDiv.innerHTML = `<h3>✅ BILL PASSED</h3><p>Aye: <strong>${votesFor}</strong> | Noe: <strong>${votesAgainst}</strong> | Abstain: <strong>${abstains}</s[...]
         } else {
-            resDiv.className = "failed"; resDiv.innerHTML = `<h3>❌ BILL DEFEATED</h3><p>Aye: <strong>${votesFor}</strong> | Noe: <strong>${votesAgainst}</strong> | Abstain: <strong>${abstains}</strong></p>`;
+            resDiv.className = "failed"; resDiv.innerHTML = `<h3>❌ BILL DEFEATED</h3><p>Aye: <strong>${votesFor}</strong> | Noe: <strong>${votesAgainst}</strong> | Abstain: <strong>${abstains}<[...]
         }
 
         // Trigger the Focus Group!
         runFocusGroup(billWing, billStance);
+    }
+
+    function generateRandomName() {
+        const firstNames = ['James', 'Sarah', 'John', 'Emma', 'Michael', 'Olivia', 'David', 'Ava', 'Robert', 'Isabella'];
+        const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+        return firstNames[Math.floor(Math.random() * firstNames.length)] + ' ' + lastNames[Math.floor(Math.random() * lastNames.length)];
     }
 
     window.onload = () => { initGrid(); loadPreset(); };

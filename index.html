@@ -3,154 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holyrood Simulator Engine</title>
+    <title>Holyrood Simulator Engine (Unicameral Edition)</title>
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #34495e;
-            --accent: #2980b9;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
+            --primary: #2c3e50; --secondary: #34495e; --accent: #2980b9;
+            --success: #27ae60; --danger: #e74c3c; --warning: #f39c12;
+            --light: #ecf0f1; --dark: #2c3e50;
         }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f7;
-            color: var(--dark);
-            margin: 0;
-            padding: 20px;
-        }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f7; color: var(--dark); margin: 0; padding: 20px; }
         h1, h2, h3 { color: var(--primary); }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        /* Stage Display Logic */
         .stage { display: none; animation: fadeIn 0.4s ease-in-out; }
         .stage.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* UI Components */
-        .btn {
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.2s;
-            margin-top: 15px;
-        }
+        .btn { background-color: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: 600; margin-top: 15px; }
         .btn:hover { background-color: #3498db; }
         .btn:disabled { background-color: #bdc3c7; cursor: not-allowed; }
         
-        .status-box {
-            background: var(--light);
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            text-align: center;
-            border: 1px solid #dcdde1;
-        }
+        .status-box { background: var(--light); padding: 15px; border-radius: 6px; margin-bottom: 20px; text-align: center; border: 1px solid #dcdde1; }
+        .status-bar { background-color: #dfe6e9; border-radius: 5px; height: 25px; overflow: hidden; margin-top: 10px; }
+        .status-fill { background-color: var(--success); height: 100%; transition: width 0.3s; }
 
-        .status-bar {
-            background-color: #dfe6e9;
-            border-radius: 5px;
-            height: 25px;
-            overflow: hidden;
-            margin-top: 10px;
-            position: relative;
-        }
-        .status-fill {
-            background-color: var(--success);
-            height: 100%;
-            transition: width 0.3s, background-color 0.3s;
-        }
+        .party-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .party-card { display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #fff; border: 1px solid #dcdde1; border-radius: 6px; }
+        .party-card input[type="number"] { width: 50px; padding: 6px; border: 1px solid #bdc3c7; border-radius: 4px; text-align: center; }
+        .party-color { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
 
-        /* Grids and Inputs */
-        .grid-2col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .party-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .party-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            background: #fff;
-            border: 1px solid #dcdde1;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-        .party-card input {
-            width: 50px;
-            padding: 6px;
-            border: 1px solid #bdc3c7;
-            border-radius: 4px;
-            text-align: center;
-        }
-        .party-color {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        /* Forms */
-        select, input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-top: 8px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
-
-        .checkbox-group label {
-            display: block;
-            padding: 10px;
-            background: #f8f9fa;
-            border: 1px solid #e1e8ed;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .checkbox-group label:hover { background: #eef2f5; }
-
-        /* Results */
-        .vote-panel { padding: 20px; background: #f8f9fa; border-radius: 8px; }
-        .summary-panel { padding: 20px; border-right: 2px solid #ecf0f1; }
+        select, input[type="text"] { width: 100%; padding: 10px; border: 1px solid #bdc3c7; border-radius: 5px; font-size: 16px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; }
         
-        #voteResult { margin-top: 20px; padding: 15px; border-radius: 5px; display: none; }
+        .chamber-container { text-align: center; margin: 20px 0; padding: 20px; background: #fff; border: 1px solid #e1e8ed; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .chamber-svg { max-width: 100%; height: auto; }
+        
+        .checkbox-group label { display: block; padding: 10px; background: #f8f9fa; border: 1px solid #e1e8ed; margin-bottom: 5px; border-radius: 5px; cursor: pointer; }
+        .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .vote-panel, .summary-panel { padding: 20px; background: #f8f9fa; border-radius: 8px; }
+        
+        #voteResult, #poVoteResult { margin-top: 20px; padding: 15px; border-radius: 5px; display: none; }
         .passed { background-color: #d5f5e3; border-left: 5px solid var(--success); }
         .failed { background-color: #fadbd8; border-left: 5px solid var(--danger); }
-        
         .breadcrumbs { font-size: 14px; color: #7f8c8d; margin-bottom: 20px; text-align: center; }
-        
-        footer { text-align: center; margin-top: 40px; color: #95a5a6; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -159,11 +52,9 @@
     <h1 style="text-align: center;">🏛️ Holyrood Simulator Engine</h1>
     <div id="breadcrumbs" class="breadcrumbs">Stage 1 of 5: Election Results</div>
 
-    <!-- ================= STAGE 1: SEAT EDITOR ================= -->
+    <!-- STAGE 1: COMPOSITION -->
     <div id="stage1" class="stage active">
         <h2>Stage 1: Parliament Composition</h2>
-        <p>Set the election results manually, or select a historical preset.</p>
-        
         <select id="presetSelect" onchange="loadPreset()">
             <option value="custom">-- Custom Sandbox --</option>
             <option value="2026" selected>2026 Election (Historical)</option>
@@ -181,123 +72,110 @@
             <p id="seatCounter" style="margin: 10px 0 0 0; font-weight: bold;"></p>
         </div>
 
-        <div class="party-grid" id="partyGrid">
-            <!-- JS generates party inputs here -->
+        <div class="party-grid" id="partyGrid"></div>
+
+        <div style="margin-top: 20px; background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #dcdde1;">
+            <label><strong>Custom Party Name:</strong></label>
+            <input type="text" id="customPartyName" value="Custom Party" onchange="updateCustomName(this.value)">
+            
+            <label style="margin-top: 10px; display: block;"><strong>Which party will YOU play as?</strong></label>
+            <select id="playerPartySelect"></select>
         </div>
 
-        <button id="btnStage1" class="btn" onclick="goToStage(2)" style="width: 100%;">Lock Parliament & Proceed</button>
+        <button id="btnStage1" class="btn" onclick="goToStage(2)" style="width: 100%;">Lock Parliament & Generate MSPs</button>
     </div>
 
-    <!-- ================= STAGE 2: PRESIDING OFFICER ================= -->
+    <!-- STAGE 2: PRESIDING OFFICER VOTE -->
     <div id="stage2" class="stage">
         <h2>Stage 2: Elect the Presiding Officer</h2>
-        <p>The Presiding Officer acts as the neutral speaker. The party providing the PO <strong>loses one voting seat</strong> (unless a vote is perfectly tied, in which case the PO votes for the status quo).</p>
+        <p>The Chamber has convened. As leader of your party, you must cast your block's vote for the new Presiding Officer.</p>
         
-        <label><strong>Select Party to provide the Presiding Officer:</strong></label>
-        <select id="poSelect"></select>
-
-        <button class="btn" onclick="goToStage(3)">Confirm Presiding Officer</button>
-        <button class="btn" style="background: #95a5a6;" onclick="goToStage(1)">Back</button>
-    </div>
-
-    <!-- ================= STAGE 3: FIRST MINISTER ================= -->
-    <div id="stage3" class="stage">
-        <h2>Stage 3: Appoint First Minister</h2>
-        <p>Parliament must now elect the head of the Scottish Government.</p>
-        
-        <label><strong>First Minister's Party:</strong></label>
-        <select id="fmPartySelect"></select>
-
-        <label><strong>Name of First Minister:</strong></label>
-        <input type="text" id="fmNameInput" placeholder="e.g. John Swinney, Anas Sarwar, Alex Salmond">
-
-        <button class="btn" onclick="goToStage(4)">Confirm First Minister</button>
-        <button class="btn" style="background: #95a5a6;" onclick="goToStage(2)">Back</button>
-    </div>
-
-    <!-- ================= STAGE 4: CABINET FORMATION ================= -->
-    <div id="stage4" class="stage">
-        <h2>Stage 4: Form the Government</h2>
-        <p>Select which parties are officially part of the Government (e.g., a formal coalition or Bute House Agreement). The First Minister's party is automatically included.</p>
-        
-        <div id="cabinetCheckboxes" class="checkbox-group">
-            <!-- JS generates checkboxes -->
+        <div class="chamber-container" id="poChamberVis">
+            <!-- SVG Arch Goes Here -->
         </div>
 
-        <button class="btn" onclick="goToStage(5)">Enter Legislative Chamber</button>
-        <button class="btn" style="background: #95a5a6;" onclick="goToStage(3)">Back</button>
+        <div id="poVoteControls">
+            <h3>Candidates for Presiding Officer</h3>
+            <div id="poCandidatesList" class="checkbox-group"></div>
+            <button class="btn" onclick="castPOVote()">Cast Your Party's Vote</button>
+        </div>
+
+        <div id="poVoteResult"></div>
+        <button id="btnStage2Next" class="btn" style="display:none; width: 100%; margin-top: 20px;" onclick="goToStage(3)">Proceed to First Minister Election</button>
     </div>
 
-    <!-- ================= STAGE 5: LEGISLATIVE CHAMBER ================= -->
+    <!-- STAGE 3: FIRST MINISTER -->
+    <div id="stage3" class="stage">
+        <h2>Stage 3: Appoint First Minister</h2>
+        <select id="fmPartySelect"></select>
+        <label><strong>Name of First Minister:</strong></label>
+        <input type="text" id="fmNameInput" placeholder="Select a party to auto-fill a leader, or type a custom name">
+        <button class="btn" onclick="goToStage(4)">Confirm First Minister</button>
+    </div>
+
+    <!-- STAGE 4: CABINET -->
+    <div id="stage4" class="stage">
+        <h2>Stage 4: Form the Government</h2>
+        <p>Select the parties forming the Government coalition.</p>
+        <div id="cabinetCheckboxes" class="checkbox-group"></div>
+        <button class="btn" onclick="goToStage(5)">Enter Legislative Chamber</button>
+    </div>
+
+    <!-- STAGE 5: LEGISLATION -->
     <div id="stage5" class="stage">
+        <div class="chamber-container" id="legChamberVis"></div>
+
         <div class="grid-2col">
-            <!-- Left Panel: Parliament Summary -->
             <div class="summary-panel">
-                <h2>The Chamber</h2>
-                <div class="status-box" style="text-align: left;">
-                    <p><strong>First Minister:</strong> <span id="displayFM"></span></p>
-                    <p><strong>Presiding Officer:</strong> <span id="displayPO"></span></p>
-                    <hr>
-                    <h4 style="margin-bottom: 5px;">Government Benches</h4>
-                    <ul id="govBenches" style="margin-top: 0; padding-left: 20px;"></ul>
-                    
-                    <h4 style="margin-bottom: 5px;">Opposition Benches</h4>
-                    <ul id="oppBenches" style="margin-top: 0; padding-left: 20px;"></ul>
-                </div>
-                <button class="btn" style="background: #e74c3c; padding: 8px 15px; font-size: 14px;" onclick="location.reload()">Restart Simulation</button>
+                <h3 style="margin-top:0;">The Chamber</h3>
+                <p><strong>First Minister:</strong> <span id="displayFM"></span></p>
+                <p><strong>Presiding Officer:</strong> <span id="displayPO"></span></p>
+                <hr>
+                <ul id="govBenches" style="padding-left: 20px;"></ul>
+                <ul id="oppBenches" style="padding-left: 20px;"></ul>
+                <button class="btn" style="background: #e74c3c; padding: 8px 15px; font-size: 14px;" onclick="location.reload()">Restart</button>
             </div>
 
-            <!-- Right Panel: Voting -->
             <div class="vote-panel">
-                <h2>Propose a Bill</h2>
+                <h3 style="margin-top:0;">Propose a Bill</h3>
                 <input type="text" id="billName" placeholder="Name your legislation...">
-                
-                <p><strong>Who is voting FOR the bill?</strong> <br> <small>(Voting power excludes the PO's seat)</small></p>
-                <div id="billVotingCheckboxes" class="checkbox-group">
-                    <!-- JS generates checkboxes -->
-                </div>
-
-                <button class="btn" onclick="holdVote()" style="width: 100%;">Ring the Division Bell (Vote)</button>
-
+                <p><strong>Who is voting AYE (For)?</strong></p>
+                <div id="billVotingCheckboxes" class="checkbox-group"></div>
+                <button class="btn" onclick="holdLegVote()" style="width: 100%;">Ring the Division Bell</button>
                 <div id="voteResult"></div>
             </div>
         </div>
     </div>
 </div>
 
-<footer>
-    <p>Scottish Parliament Simulator Engine | Built for GitHub Pages Deployment</p>
-</footer>
-
 <script>
-    // --- 1. CORE DATA DICTIONARY ---
     const TOTAL_SEATS = 129;
-    const MAJORITY_TARGET = 65;
-
+    
+    // Left-to-Right Alignment Index for the SVG Chamber
     const baseParties = [
-        { id: 'snp', name: "SNP", seats: 0, color: "#FDF38E" },
-        { id: 'labour', name: "Scottish Labour", seats: 0, color: "#E4003B" },
-        { id: 'conservatives', name: "Conservatives", seats: 0, color: "#0087DC" },
-        { id: 'greens', name: "Scottish Greens", seats: 0, color: "#00B140" },
-        { id: 'libdems', name: "Liberal Democrats", seats: 0, color: "#FAA61A" },
-        { id: 'reform', name: "Reform UK", seats: 0, color: "#12B6CF" },
-        { id: 'alba', name: "Alba Party", seats: 0, color: "#005EB8" },
-        { id: 'ssp', name: "Scottish Socialist", seats: 0, color: "#CC0000" },
-        { id: 'solidarity', name: "Solidarity", seats: 0, color: "#E53935" },
-        { id: 'family', name: "Scottish Family", seats: 0, color: "#F18A00" },
-        { id: 'allforunity', name: "All for Unity", seats: 0, color: "#000000" },
-        { id: 'ukip', name: "UKIP", seats: 0, color: "#712F87" },
-        { id: 'restore', name: "Restore Scotland", seats: 0, color: "#2A52BE" },
-        { id: 'independents', name: "Independents", seats: 0, color: "#DDDDDD" },
-        { id: 'other', name: "Other / Minor", seats: 0, color: "#999999" }
+        { id: 'ssp', name: "Scottish Socialist", seats: 0, color: "#CC0000", align: 1 },
+        { id: 'solidarity', name: "Solidarity", seats: 0, color: "#E53935", align: 2 },
+        { id: 'greens', name: "Scottish Greens", seats: 0, color: "#00B140", align: 3 },
+        { id: 'labour', name: "Scottish Labour", seats: 0, color: "#E4003B", align: 4 },
+        { id: 'snp', name: "SNP", seats: 0, color: "#FDF38E", align: 5 },
+        { id: 'alba', name: "Alba Party", seats: 0, color: "#005EB8", align: 6 },
+        { id: 'custom', name: "Custom Party", seats: 0, color: "#888888", align: 7 },
+        { id: 'libdems', name: "Liberal Democrats", seats: 0, color: "#FAA61A", align: 8 },
+        { id: 'independents', name: "Independents", seats: 0, color: "#DDDDDD", align: 9 },
+        { id: 'conservatives', name: "Conservatives", seats: 0, color: "#0087DC", align: 10 },
+        { id: 'reform', name: "Reform UK", seats: 0, color: "#12B6CF", align: 11 },
+        { id: 'libertarians', name: "Scot. Libertarians", seats: 0, color: "#F6B300", align: 12 },
+        { id: 'family', name: "Scottish Family", seats: 0, color: "#F18A00", align: 13 },
+        { id: 'restore', name: "Restore Scotland", seats: 0, color: "#2A52BE", align: 14 },
+        { id: 'ukip', name: "UKIP", seats: 0, color: "#712F87", align: 15 },
+        { id: 'allforunity', name: "All for Unity", seats: 0, color: "#000000", align: 16 }
     ];
 
-    // Cloned state array for the active simulation
     let parties = JSON.parse(JSON.stringify(baseParties));
-
+    
     const presets = {
         "1999": { labour: 56, snp: 35, conservatives: 18, libdems: 17, greens: 1, ssp: 1, independents: 1 },
-        "2003": { labour: 50, snp: 27, conservatives: 18, libdems: 17, greens: 7, ssp: 6, other: 1, independents: 3 },
+        "2003": { labour: 50, snp: 27, conservatives: 18, libdems: 17, greens: 7, ssp: 6, independents: 4 },
         "2007": { snp: 47, labour: 46, conservatives: 17, libdems: 16, greens: 2, independents: 1 },
         "2011": { snp: 69, labour: 37, conservatives: 15, libdems: 5, greens: 2, independents: 1 },
         "2016": { snp: 63, conservatives: 31, labour: 24, greens: 6, libdems: 5 },
@@ -305,141 +183,262 @@
         "2026": { snp: 58, labour: 17, reform: 17, greens: 15, conservatives: 12, libdems: 10 }
     };
 
-    // State memory
-    const appState = {
-        poPartyId: "",
-        fmPartyId: "",
-        fmName: "",
-        govParties: [] // Array of party IDs
+    const historicalPOs = {
+        "1999": [ {name: "Sir David Steel", party: "libdems"}, {name: "George Reid", party: "snp"} ],
+        "2003": [ {name: "George Reid", party: "snp"}, {name: "Murray Tosh", party: "conservatives"} ],
+        "2007": [ {name: "Alex Fergusson", party: "conservatives"}, {name: "Alasdair Morgan", party: "snp"} ],
+        "2011": [ {name: "Tricia Marwick", party: "snp"}, {name: "Elaine Smith", party: "labour"} ],
+        "2016": [ {name: "Ken Macintosh", party: "labour"}, {name: "Linda Fabiani", party: "snp"} ],
+        "2021": [ {name: "Alison Johnstone", party: "greens"}, {name: "Liam McArthur", party: "libdems"} ],
+        "2026": [ {name: "Edward Mountain", party: "conservatives"}, {name: "Claire Baker", party: "labour"} ]
     };
 
-    // --- 2. STAGE 1: COMPOSITION LOGIC ---
+    const appState = {
+        playerPartyId: "",
+        activeYear: "2026",
+        allMSPs: [],
+        poCandidates: [],
+        electedPO: null,
+        fmPartyId: "",
+        fmName: "",
+        govParties: []
+    };
+
+    // --- MSP NAME GENERATOR ---
+    const firstNames = ["Alasdair", "Fiona", "Callum", "Morag", "Ewan", "Isla", "Hamish", "Kirsty", "Angus", "Mairi", "Cameron", "Aileen", "Duncan", "Catriona", "Lachlan", "Gillian"];
+    const lastNames = ["MacDonald", "Robertson", "Campbell", "Stewart", "Murray", "Mackenzie", "Fraser", "MacLeod", "Ross", "MacLean", "Paterson", "Henderson", "Findlay", "Sarwar", "Forbes"];
+    
+    function generateRandomName() {
+        return `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+    }
+
+    // --- STAGE 1 ---
     function initStage1() {
         const grid = document.getElementById('partyGrid');
         grid.innerHTML = '';
-        parties.forEach((p, i) => {
+        parties.sort((a,b) => a.align - b.align).forEach((p) => {
             grid.innerHTML += `
                 <div class="party-card">
-                    <div>
-                        <span class="party-color" style="background-color: ${p.color};"></span>
-                        <span style="font-size: 14px; font-weight: 500;">${p.name}</span>
-                    </div>
-                    <input type="number" id="input_${p.id}" min="0" max="129" value="${p.seats}" onchange="updateSeat('${p.id}', this.value)">
-                </div>
-            `;
+                    <div><span class="party-color" style="background-color: ${p.color};"></span>
+                    <span id="label_${p.id}" style="font-size: 14px; font-weight: 500;">${p.name}</span></div>
+                    <input type="number" min="0" max="129" value="${p.seats}" onchange="updateSeat('${p.id}', this.value)">
+                </div>`;
         });
-        loadPreset(); // Load default (2026)
+        loadPreset();
+    }
+
+    function updateCustomName(val) {
+        let customParty = parties.find(p => p.id === 'custom');
+        customParty.name = val || "Custom Party";
+        document.getElementById('label_custom').innerText = customParty.name;
+        updatePlayerDropdown();
     }
 
     function loadPreset() {
         const selection = document.getElementById('presetSelect').value;
+        appState.activeYear = selection;
         if (selection !== "custom") {
             const data = presets[selection];
-            parties.forEach(p => {
-                p.seats = data[p.id] || 0;
-                document.getElementById(`input_${p.id}`).value = p.seats;
-            });
+            parties.forEach(p => { p.seats = data[p.id] || 0; });
         }
+        
+        // Re-render inputs
+        parties.forEach(p => {
+            const input = document.querySelector(`input[onchange="updateSeat('${p.id}', this.value)"]`);
+            if (input) input.value = p.seats;
+        });
         recalculateSeats();
     }
 
     function updateSeat(partyId, val) {
         document.getElementById('presetSelect').value = "custom";
+        appState.activeYear = "custom";
         const party = parties.find(p => p.id === partyId);
         if (party) party.seats = parseInt(val) || 0;
         recalculateSeats();
     }
 
     function recalculateSeats() {
-        let total = 0;
-        let maxSeats = 0;
-        let maxParty = null;
-
+        let total = 0; let maxSeats = 0; let maxParty = null;
         parties.forEach(p => {
             total += p.seats;
             if (p.seats > maxSeats) { maxSeats = p.seats; maxParty = p; }
         });
 
         const titleEl = document.getElementById('parlStatusTitle');
-        const counterEl = document.getElementById('seatCounter');
-        const btn = document.getElementById('btnStage1');
-        const bar = document.getElementById('seatBar');
-
-        counterEl.innerText = `Allocated: ${total} / ${TOTAL_SEATS}`;
-        bar.style.width = Math.min((total / TOTAL_SEATS) * 100, 100) + "%";
+        document.getElementById('seatCounter').innerText = `Allocated: ${total} / ${TOTAL_SEATS}`;
+        document.getElementById('seatBar').style.width = Math.min((total / TOTAL_SEATS) * 100, 100) + "%";
 
         if (total !== TOTAL_SEATS) {
-            titleEl.innerText = "Invalid Seat Allocation";
-            titleEl.style.color = "var(--danger)";
-            bar.style.backgroundColor = "var(--danger)";
-            btn.disabled = true;
-            btn.innerText = "Seats must equal exactly 129";
+            titleEl.innerText = "Invalid Seat Allocation"; titleEl.style.color = "var(--danger)";
+            document.getElementById('seatBar').style.backgroundColor = "var(--danger)";
+            document.getElementById('btnStage1').disabled = true;
         } else {
-            bar.style.backgroundColor = "var(--success)";
-            btn.disabled = false;
-            btn.innerText = "Lock Parliament & Proceed";
-            
-            // Dynamic Naming Logic
-            if (maxSeats === 129) {
-                titleEl.innerText = `👑 ${maxParty.name} Supremacy (Total Dictatorship)`;
-                titleEl.style.color = "#8e44ad";
-            } else if (maxSeats >= MAJORITY_TARGET) {
-                titleEl.innerText = `✅ ${maxParty.name} Majority Government`;
-                titleEl.style.color = "var(--success)";
-            } else {
-                titleEl.innerText = `⚖️ Hung Parliament (Minority Rule)`;
-                titleEl.style.color = "var(--warning)";
-            }
+            document.getElementById('seatBar').style.backgroundColor = "var(--success)";
+            document.getElementById('btnStage1').disabled = false;
+            if (maxSeats === 129) { titleEl.innerText = `👑 ${maxParty.name} Supremacy`; titleEl.style.color = "#8e44ad"; }
+            else if (maxSeats >= 65) { titleEl.innerText = `✅ ${maxParty.name} Majority`; titleEl.style.color = "var(--success)"; }
+            else { titleEl.innerText = `⚖️ Hung Parliament`; titleEl.style.color = "var(--warning)"; }
         }
+        updatePlayerDropdown();
     }
 
-    // --- 3. STAGE NAVIGATION & POPULATION ---
-    function goToStage(stageNum) {
-        // Validation before advancing
-        if (stageNum === 3) { appState.poPartyId = document.getElementById('poSelect').value; }
-        if (stageNum === 4) {
-            appState.fmPartyId = document.getElementById('fmPartySelect').value;
-            appState.fmName = document.getElementById('fmNameInput').value || "Unnamed Politician";
+    function updatePlayerDropdown() {
+        const sel = document.getElementById('playerPartySelect');
+        const currentVal = sel.value;
+        sel.innerHTML = '';
+        parties.filter(p => p.seats > 0).sort((a,b) => b.seats - a.seats).forEach(p => {
+            sel.innerHTML += `<option value="${p.id}">${p.name} (${p.seats} seats)</option>`;
+        });
+        if (currentVal && Array.from(sel.options).some(o => o.value === currentVal)) sel.value = currentVal;
+    }
+
+    // --- SVG ARCH RENDERER ---
+    function drawArch(containerId, voteData) {
+        // voteData is an array of 129 objects: { color: '#hex' }
+        const rows = [18, 23, 27, 30, 31];
+        let svg = `<svg viewBox="0 0 500 270" width="100%" style="max-width: 600px;">`;
+        let index = 0;
+        
+        for (let r = 0; r < rows.length; r++) {
+            let numInRow = rows[r];
+            let radius = 90 + (r * 35);
+            for (let i = 0; i < numInRow; i++) {
+                if (index >= voteData.length) break;
+                let angle = Math.PI - (i / (numInRow - 1)) * Math.PI;
+                let cx = 250 + radius * Math.cos(angle);
+                let cy = 250 - radius * Math.sin(angle);
+                let color = voteData[index].color || '#ecf0f1';
+                svg += `<circle cx="${cx}" cy="${cy}" r="11" fill="${color}" stroke="#fff" stroke-width="1.5" />`;
+                index++;
+            }
         }
-        if (stageNum === 5) {
-            appState.govParties = [];
-            parties.forEach(p => {
-                if (p.seats > 0) {
-                    const chk = document.getElementById(`cab_${p.id}`);
-                    if (chk && chk.checked) appState.govParties.push(p.id);
+        svg += `</svg>`;
+        document.getElementById(containerId).innerHTML = svg;
+    }
+
+    function getBaseChamberColors() {
+        let seatColors = [];
+        parties.filter(p => p.seats > 0).sort((a,b) => a.align - b.align).forEach(p => {
+            for(let i=0; i<p.seats; i++) seatColors.push({ color: p.color, partyId: p.id });
+        });
+        return seatColors;
+    }
+
+    // --- STAGE NAVIGATION ---
+    function goToStage(num) {
+        if (num === 2) {
+            appState.playerPartyId = document.getElementById('playerPartySelect').value;
+            generateRoster();
+            setupPOElection();
+        }
+        if (num === 4) {
+            appState.fmPartyId = document.getElementById('fmPartySelect').value;
+            appState.fmName = document.getElementById('fmNameInput').value || "First Minister";
+            setupCabinet();
+        }
+        if (num === 5) setupLegislation();
+
+        document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+        document.getElementById(`stage${num}`).classList.add('active');
+        document.getElementById('breadcrumbs').innerText = `Stage ${num} of 5`;
+    }
+
+    function generateRoster() {
+        appState.allMSPs = [];
+        parties.filter(p => p.seats > 0).forEach(p => {
+            for(let i=0; i<p.seats; i++) {
+                appState.allMSPs.push({ id: `msp_${p.id}_${i}`, name: generateRandomName(), party: p.id });
+            }
+        });
+    }
+
+    // --- PO ELECTION LOGIC ---
+    function setupPOElection() {
+        appState.poCandidates = [];
+        
+        if (appState.activeYear !== "custom" && historicalPOs[appState.activeYear]) {
+            // Load Historical if they have seats
+            historicalPOs[appState.activeYear].forEach(cand => {
+                let partyObj = parties.find(p => p.id === cand.party);
+                if (partyObj && partyObj.seats > 0) {
+                    appState.poCandidates.push({ name: cand.name, partyObj: partyObj });
                 }
             });
         }
+        
+        // Fallback/Custom: Pick 2-3 random MSPs from top parties
+        if (appState.poCandidates.length === 0) {
+            let topParties = parties.filter(p => p.seats > 0).sort((a,b) => b.seats - a.seats).slice(0, 3);
+            topParties.forEach(p => {
+                appState.poCandidates.push({ name: generateRandomName(), partyObj: p });
+            });
+        }
 
-        // Setup the next stage UI
-        if (stageNum === 2) buildStage2();
-        if (stageNum === 3) buildStage3();
-        if (stageNum === 4) buildStage4();
-        if (stageNum === 5) buildStage5();
+        // Draw initial blank chamber (colored by party)
+        drawArch('poChamberVis', getBaseChamberColors());
 
-        // Switch visuals
-        document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
-        document.getElementById(`stage${stageNum}`).classList.add('active');
-        document.getElementById('breadcrumbs').innerText = `Stage ${stageNum} of 5`;
+        // Setup Controls
+        const list = document.getElementById('poCandidatesList');
+        list.innerHTML = '';
+        appState.poCandidates.forEach((cand, idx) => {
+            list.innerHTML += `
+                <label>
+                    <input type="radio" name="poVote" value="${idx}">
+                    <span class="party-color" style="background-color: ${cand.partyObj.color};"></span>
+                    ${cand.name} (${cand.partyObj.name})
+                </label>
+            `;
+        });
+        list.innerHTML += `<label><input type="radio" name="poVote" value="-1" checked> Abstain</label>`;
     }
 
-    function buildStage2() {
-        const sel = document.getElementById('poSelect');
-        sel.innerHTML = '';
+    function castPOVote() {
+        const userVote = parseInt(document.querySelector('input[name="poVote"]:checked').value);
+        let results = Array(appState.poCandidates.length).fill(0);
+        let abstains = 0;
+        let chamberVotes = getBaseChamberColors(); // Start with left-to-right order
+
+        // Simulate AI Voting
+        chamberVotes.forEach(seat => {
+            if (seat.partyId === appState.playerPartyId) {
+                // User's party block vote
+                if (userVote === -1) { abstains++; seat.color = '#bdc3c7'; }
+                else { results[userVote]++; seat.color = appState.poCandidates[userVote].partyObj.color; }
+            } else {
+                // AI Party logic: Vote for their own candidate if one exists, else vote for largest candidate party
+                let aiVoteIdx = appState.poCandidates.findIndex(c => c.partyObj.id === seat.partyId);
+                if (aiVoteIdx === -1) aiVoteIdx = 0; // Fallback to candidate 0
+                results[aiVoteIdx]++;
+                seat.color = appState.poCandidates[aiVoteIdx].partyObj.color;
+            }
+        });
+
+        drawArch('poChamberVis', chamberVotes);
+
+        // Determine Winner
+        let maxVotes = 0; let winnerIdx = 0;
+        results.forEach((v, idx) => { if (v > maxVotes) { maxVotes = v; winnerIdx = idx; } });
+        appState.electedPO = appState.poCandidates[winnerIdx];
+
+        const resDiv = document.getElementById('poVoteResult');
+        resDiv.style.display = 'block';
+        resDiv.className = "passed";
+        resDiv.innerHTML = `<h3>✅ ${appState.electedPO.name} elected Presiding Officer!</h3>`;
+        
+        document.getElementById('poVoteControls').style.display = 'none';
+        document.getElementById('btnStage2Next').style.display = 'block';
+
+        // Setup Stage 3 Dropdowns
+        const fmSel = document.getElementById('fmPartySelect');
+        fmSel.innerHTML = '';
         parties.filter(p => p.seats > 0).sort((a,b) => b.seats - a.seats).forEach(p => {
-            sel.innerHTML += `<option value="${p.id}">${p.name} (${p.seats} seats)</option>`;
+            fmSel.innerHTML += `<option value="${p.id}">${p.name}</option>`;
         });
     }
 
-    function buildStage3() {
-        const sel = document.getElementById('fmPartySelect');
-        sel.innerHTML = '';
-        parties.filter(p => p.seats > 0).sort((a,b) => b.seats - a.seats).forEach(p => {
-            sel.innerHTML += `<option value="${p.id}">${p.name} (${p.seats} seats)</option>`;
-        });
-    }
-
-    function buildStage4() {
+    // --- CABINET ---
+    function setupCabinet() {
         const container = document.getElementById('cabinetCheckboxes');
         container.innerHTML = '';
         parties.filter(p => p.seats > 0).sort((a,b) => b.seats - a.seats).forEach(p => {
@@ -448,119 +447,86 @@
                 <label>
                     <input type="checkbox" id="cab_${p.id}" value="${p.id}" ${isFM ? 'checked disabled' : ''}>
                     <span class="party-color" style="background-color: ${p.color};"></span>
-                    ${p.name} (${p.seats} seats) ${isFM ? '<i>(FM Party)</i>' : ''}
+                    ${p.name} (${p.seats} seats)
                 </label>
             `;
         });
     }
 
-    function buildStage5() {
-        // Reset Vote Result
-        document.getElementById('voteResult').style.display = 'none';
-        document.getElementById('billName').value = "";
+    // --- LEGISLATION ---
+    function setupLegislation() {
+        appState.govParties = [];
+        parties.forEach(p => {
+            const chk = document.getElementById(`cab_${p.id}`);
+            if (chk && chk.checked) appState.govParties.push(p.id);
+        });
 
         const fmParty = parties.find(p => p.id === appState.fmPartyId);
-        const poParty = parties.find(p => p.id === appState.poPartyId);
-        
-        document.getElementById('displayFM').innerHTML = `${appState.fmName} <span style="color:${fmParty.color};">■</span> (${fmParty.name})`;
-        document.getElementById('displayPO').innerHTML = `<span style="color:${poParty.color};">■</span> ${poParty.name} <i>(-1 voting power)</i>`;
+        document.getElementById('displayFM').innerHTML = `${appState.fmName} <span style="color:${fmParty.color};">■</span>`;
+        document.getElementById('displayPO').innerHTML = `${appState.electedPO.name} <span style="color:${appState.electedPO.partyObj.color};">■</span> <i>(-1 vote)</i>`;
+
+        drawArch('legChamberVis', getBaseChamberColors());
 
         const govList = document.getElementById('govBenches');
         const oppList = document.getElementById('oppBenches');
         const voteBox = document.getElementById('billVotingCheckboxes');
-        
-        govList.innerHTML = '';
-        oppList.innerHTML = '';
-        voteBox.innerHTML = '';
-
-        let govTotal = 0;
-        let oppTotal = 0;
+        govList.innerHTML = ''; oppList.innerHTML = ''; voteBox.innerHTML = '';
 
         parties.filter(p => p.seats > 0).sort((a,b) => b.seats - a.seats).forEach(p => {
-            // Determine voting power (subtract 1 if they hold PO)
             let power = p.seats;
-            if (p.id === appState.poPartyId) power -= 1;
+            if (p.id === appState.electedPO.partyObj.id) power -= 1; // PO doesn't vote
 
             const isGov = appState.govParties.includes(p.id) || p.id === appState.fmPartyId;
-            const li = `<li>${p.name}: ${power} votes ${p.id === appState.poPartyId ? '(PO)' : ''}</li>`;
+            const li = `<li>${p.name}: ${power} votes</li>`;
             
-            if (isGov) {
-                govList.innerHTML += li;
-                govTotal += power;
-            } else {
-                oppList.innerHTML += li;
-                oppTotal += power;
-            }
+            if (isGov) govList.innerHTML += li; else oppList.innerHTML += li;
 
-            // Populate voting checkboxes
             if (power > 0) {
                 voteBox.innerHTML += `
                     <label>
                         <input type="checkbox" id="vote_${p.id}" value="${p.id}">
                         <span class="party-color" style="background-color: ${p.color};"></span>
-                        ${p.name} (${power} votes) ${isGov ? '<b>[GOV]</b>' : ''}
+                        ${p.name} (${power} votes)
                     </label>
                 `;
             }
         });
-
-        // Add headers to lists
-        govList.insertAdjacentHTML('afterbegin', `<strong style="color:var(--success)">Total Govt Votes: ${govTotal}</strong><br>`);
-        oppList.insertAdjacentHTML('afterbegin', `<strong style="color:var(--danger)">Total Opp Votes: ${oppTotal}</strong><br>`);
     }
 
-    // --- 4. VOTING ENGINE ---
-    function holdVote() {
-        const billName = document.getElementById('billName').value || "Unnamed Bill";
-        let votesFor = 0;
-        let votesAgainst = 0;
+    function holdLegVote() {
+        let votesFor = 0; let votesAgainst = 0;
+        let chamberVotes = getBaseChamberColors();
 
-        parties.forEach(p => {
-            if (p.seats === 0) return;
-            
-            let power = p.seats;
-            if (p.id === appState.poPartyId) power -= 1;
-
-            if (power > 0) {
-                const chk = document.getElementById(`vote_${p.id}`);
-                if (chk && chk.checked) {
-                    votesFor += power;
-                } else {
-                    votesAgainst += power;
-                }
+        chamberVotes.forEach(seat => {
+            if (seat.partyId === appState.electedPO.partyObj.id && seat === chamberVotes.find(s => s.partyId === appState.electedPO.partyObj.id)) {
+                seat.color = '#bdc3c7'; // PO Abstains
+                return;
+            }
+            const chk = document.getElementById(`vote_${seat.partyId}`);
+            if (chk && chk.checked) {
+                votesFor++;
+                seat.color = 'var(--success)'; // Green for AYE
+            } else {
+                votesAgainst++;
+                seat.color = 'var(--danger)'; // Red for NO
             }
         });
 
-        const resultDiv = document.getElementById('voteResult');
-        resultDiv.style.display = 'block';
+        drawArch('legChamberVis', chamberVotes);
+        
+        const billName = document.getElementById('billName').value || "Unnamed Bill";
+        const resDiv = document.getElementById('voteResult');
+        resDiv.style.display = 'block';
 
         if (votesFor > votesAgainst) {
-            resultDiv.className = "passed";
-            resultDiv.innerHTML = `
-                <h3 style="margin-top:0; color:var(--success);">✅ BILL PASSED</h3>
-                <p><strong>"${billName}"</strong> has passed Parliament.</p>
-                <p>Aye: <strong>${votesFor}</strong> <br> Noe: <strong>${votesAgainst}</strong></p>
-            `;
-        } else if (votesFor === votesAgainst) {
-            resultDiv.className = "failed";
-            const poParty = parties.find(p => p.id === appState.poPartyId);
-            resultDiv.innerHTML = `
-                <h3 style="margin-top:0; color:var(--danger);">⚖️ TIED (BILL FAILED)</h3>
-                <p><strong>"${billName}"</strong> resulted in a perfect tie.</p>
-                <p>The Presiding Officer (${poParty.name}) casts the deciding vote for the <strong>status quo</strong>. The bill falls.</p>
-                <p>Aye: <strong>${votesFor}</strong> <br> Noe: <strong>${votesAgainst}</strong></p>
-            `;
+            resDiv.className = "passed";
+            resDiv.innerHTML = `<h3>✅ BILL PASSED</h3><p>Aye: <strong>${votesFor}</strong> | Noe: <strong>${votesAgainst}</strong></p>`;
         } else {
-            resultDiv.className = "failed";
-            resultDiv.innerHTML = `
-                <h3 style="margin-top:0; color:var(--danger);">❌ BILL DEFEATED</h3>
-                <p><strong>"${billName}"</strong> has been rejected by Parliament.</p>
-                <p>Aye: <strong>${votesFor}</strong> <br> Noe: <strong>${votesAgainst}</strong></p>
-            `;
+            resDiv.className = "failed";
+            resDiv.innerHTML = `<h3>❌ BILL DEFEATED</h3><p>Aye: <strong>${votesFor}</strong> | Noe: <strong>${votesAgainst}</strong></p>`;
         }
     }
 
-    // Boot App
     window.onload = initStage1;
 </script>
 </body>
